@@ -11,7 +11,7 @@ public class BasicSensorComp : MonoBehaviour, ISensorComponent
     {
         IDamagableComponent myTarget = null;
         List<IDamagableComponent> targets = EntityManager.inst.FindVisible(transform.position,gain,GetComponent<IDamagableComponent>().faction);
-        Debug.Log("Searching!");
+        // Debug.Log("Searching!");
         //Target the biggest
         float maxHardness = -999;
         foreach (IDamagableComponent target in targets) {

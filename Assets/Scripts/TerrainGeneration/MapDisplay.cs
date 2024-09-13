@@ -3,14 +3,13 @@ using UnityEngine;
 public class MapDisplay : MonoBehaviour
 {
     public Renderer textureRenderer;
-    public MeshFilter meshFilter;
     public MeshRenderer meshRenderer;
 
     public void DrawNoiseMap(float[,] noiseMap) {
         int width = noiseMap.GetLength(0);
         int height = noiseMap.GetLength(1);
 
-        Texture2D texture = new Texture2D(width, height);
+        // Texture2D texture = new Texture2D(width, height);
 
         Color[] colorMap = new Color[width * height];
 
@@ -20,15 +19,15 @@ public class MapDisplay : MonoBehaviour
             }
         }
 
-        texture.SetPixels(colorMap);
-        texture.Apply();
+        // texture.SetPixels(colorMap);
+        // texture.Apply();
 
-        textureRenderer.sharedMaterial.mainTexture = texture;
+        // textureRenderer.sharedMaterial.mainTexture = texture;
 
         textureRenderer.transform.localScale = new Vector3(width,1,height);
     }
 
-    public void DrawMesh(MeshData meshData) {
-        meshFilter.sharedMesh = meshData.CreateMesh();
+    public void DrawMesh(MeshData meshData, MeshFilter targetMeshFilter) {
+        targetMeshFilter.sharedMesh = meshData.CreateMesh();
     }
 }
