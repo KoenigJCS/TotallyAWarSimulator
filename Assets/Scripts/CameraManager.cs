@@ -29,55 +29,70 @@ public class CameraManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKey(KeyCode.W))
+        if(Input.GetKeyDown(KeyCode.Mouse2))
         {
-            YawNode.transform.Translate(Vector3.forward * Time.deltaTime * cameraSenitiivity);
+            Cursor.lockState = CursorLockMode.Locked;
         }
-        if(Input.GetKey(KeyCode.S))
+        if(Input.GetKeyUp(KeyCode.Mouse2))
         {
-            YawNode.transform.Translate(Vector3.back * Time.deltaTime * cameraSenitiivity);
-        }
-
-        if(Input.GetKey(KeyCode.A))
-        {
-            YawNode.transform.Translate(Vector3.left * Time.deltaTime * cameraSenitiivity);
-        }
-        if(Input.GetKey(KeyCode.D))
-        {
-            YawNode.transform.Translate(Vector3.right * Time.deltaTime * cameraSenitiivity);
+            Cursor.lockState = CursorLockMode.Confined;
         }
 
-        if(Input.GetKey(KeyCode.R))
+        float moveCoefficent = Time.deltaTime * cameraSenitiivity * YawNode.transform.position.y;
+        moveCoefficent = Mathf.Clamp(moveCoefficent, 0.0001f, 999f);
+
+        if(!Input.GetKey(KeyCode.Mouse2)) 
         {
-            YawNode.transform.Translate(Vector3.up * Time.deltaTime * cameraSenitiivity);
-        }
-        if(Input.GetKey(KeyCode.F))
+            
+            if(Input.GetKey(KeyCode.UpArrow))
+            {
+                YawNode.transform.Translate(Vector3.forward * moveCoefficent);
+            }
+            if(Input.GetKey(KeyCode.DownArrow))
+            {
+                YawNode.transform.Translate(Vector3.back * moveCoefficent);
+            }
+
+            if(Input.GetKey(KeyCode.LeftArrow))
+            {
+                YawNode.transform.Translate(Vector3.left * moveCoefficent);
+            }
+            if(Input.GetKey(KeyCode.RightArrow))
+            {
+                YawNode.transform.Translate(Vector3.right * moveCoefficent);
+            }
+
+            if(Input.GetKey(KeyCode.KeypadPlus))
+            {
+                YawNode.transform.Translate(Vector3.up * moveCoefficent);
+            }
+            if(Input.GetKey(KeyCode.KeypadMinus))
+            {
+                YawNode.transform.Translate(Vector3.down * moveCoefficent);
+            }
+
+            // currentPitchEulerAngles = PitchNode.transform.localEulerAngles;
+            // if(Input.GetKey(KeyCode.Z))
+            // {
+            //     currentPitchEulerAngles.x -= turnRate * Time.deltaTime;
+            // }
+            // if(Input.GetKey(KeyCode.X))
+            // {
+            //     currentPitchEulerAngles.x += turnRate * Time.deltaTime;
+            // }
+        } 
+        else 
         {
-            YawNode.transform.Translate(Vector3.down * Time.deltaTime * cameraSenitiivity);
+            Vector3 mouseDelta = Input.mousePositionDelta;
+
+            YawNode.transform.Translate(moveCoefficent * new Vector3(mouseDelta.x,0,mouseDelta.y));
         }
 
-        currentYawEulerAngles = YawNode.transform.localEulerAngles;
-        if(Input.GetKey(KeyCode.Q))
-        {
-            currentYawEulerAngles.y -= turnRate * Time.deltaTime;
-        }
-        if(Input.GetKey(KeyCode.E))
-        {
-            currentYawEulerAngles.y += turnRate * Time.deltaTime;
-        }
-        YawNode.transform.localEulerAngles = currentYawEulerAngles;
+        YawNode.transform.Translate(-2f * moveCoefficent * Input.mouseScrollDelta );
 
-        currentPitchEulerAngles = PitchNode.transform.localEulerAngles;
-        if(Input.GetKey(KeyCode.Z))
-        {
-            currentPitchEulerAngles.x -= turnRate * Time.deltaTime;
-        }
-        if(Input.GetKey(KeyCode.X))
-        {
-            currentPitchEulerAngles.x += turnRate * Time.deltaTime;
-        }
-
-        PitchNode.transform.localEulerAngles = currentPitchEulerAngles;
+        float newY = Mathf.Clamp(YawNode.transform.position.y,20f,900f);
+        
+        YawNode.transform.position = new(YawNode.transform.position.x,newY,YawNode.transform.position.z);
     }
 }
 
